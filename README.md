@@ -39,3 +39,34 @@ for i, job_title in enumerate(job_titles):
 2. Data Scientists place more emphasis on python, likely due to python's superior capability in drawing insights and various other coding techniques.
 
 3. As pay goes up from data analyst, engineer and scientist, there is a greater demand for advanced coding skills such as python and R. 
+
+## How are job skills trending for Data Science jobs in the UK 
+
+## Visualisation 
+
+``` python 
+#using seaborn to plot the trends
+
+
+sns.lineplot(data=data_jobs_percent_UK, dashes=False, markers=True, marker='o', markersize=8, palette='tab10')
+# Customizing the plot
+plt.title('Trends in Demand for Data Science Skills in the UK (by % of Job Postings)', fontsize=14, fontweight='bold', pad=20)
+plt.xlabel(' ')
+# Mapping month numbers to month names
+plt.xticks(ticks=range(1, 13), labels=[calendar.month_name[i] for i in range(1, 13)], rotation=45)
+
+#adding y label persentage of job postings
+from matplotlib.ticker import FuncFormatter
+ax = plt.gca()
+ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: '{:.0f}%'.format(y)))
+
+plt.ylabel('Percentage of Job Postings (%)')
+plt.legend(title='Skills', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=10, title_fontsize=12, borderaxespad=0.)
+plt.tight_layout()
+```
+## Results
+
+![Visualisation of Skill Demands for Data Jobs postings in the UK](output.png) 
+
+Python remains stable throughout the year and above skills like sql and R. 
+
