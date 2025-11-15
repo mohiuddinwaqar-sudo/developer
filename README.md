@@ -68,5 +68,76 @@ plt.tight_layout()
 
 ![Visualisation of Skill Demands for Data Jobs postings in the UK](output.png) 
 
-Python remains stable throughout the year and above skills like sql and R. 
+- Python remains stable throughout the year and above skills like sql and R. 
 
+## Differences between median salaries of the top 3 Data Roles 
+
+``` python 
+order = medians.index.tolist()
+
+combined_median = df_UK_top_jobs["salary_year_avg"].median()
+
+sns.boxplot( 
+    data=df_UK_top_jobs,
+    x="salary_year_avg",
+    y="job_title_short",
+    order= order,
+    palette="Set2"  
+)
+
+#Calculate medians
+medians = (
+    df_UK_top_jobs.groupby("job_title_short")["salary_year_avg"]
+    .median()
+    .reindex(job_titles)
+    .sort_values(ascending=False)
+    
+)
+
+# Add labels
+for i, (job, median) in enumerate(medians.items()):
+    plt.text(
+        median + 1000,        # move label a bit to the right
+        i,                    # vertical position
+        f"${int(median/1000)}K",
+        va="center",
+        fontweight="bold",
+        color="black"
+    )
+
+# Format x-axis labels as $XXK
+ax = plt.gca()
+ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, pos: f"${int(x/1000)}K"))
+
+plt.title("Top Data Jobs in UK", fontsize= 20)
+
+# Add combined median line
+plt.axvline(
+    combined_median,
+    color="red",
+    linestyle="--",
+    linewidth=2,
+    label=f"Combined Median (${int(combined_median/1000)}K)"
+)
+# Add legend for the reference lines
+plt.legend(
+    title="Reference Lines",
+    bbox_to_anchor=(1.02, 1),
+    loc="upper left",
+    borderaxespad=0
+)
+plt.xlabel("Salary", fontsize = 12)
+plt.ylabel(" ")
+plt.show()
+
+```
+
+## Results 
+
+![salary_analysis](Boxplot.png)
+
+- Data engineer leads the charge when discussing median salaries. This is likely due to a greater demand of relevant experience to become a data engineer. 
+
+- The median across all three roles combined was $97,000 USD. Both Data Scientists and Engineers had higher medians than the combined median, however, data analyst did not. 
+
+- It is highly likely data analyst roles have a lower median due to years of experience and skillset. As previously shown above, there is less emphasis on data analysts to learn advanced coding languages such as python and r. These languages command a higher salary for data roles. 
