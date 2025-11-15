@@ -1,6 +1,6 @@
-#The Analysis 
+# The Analysis 
 
-## What are the most in demand job skills for the top 3 most popular data jobs 
+## 1. What are the most in demand job skills for the top 3 most popular data jobs 
 
 For this part I wanted to explore the skillsets that are most desired in the top data jobs. I observed the United Kingdom as it has a similar context to Australia!
 
@@ -9,7 +9,7 @@ For my analysis I utilised various tools. I created a new dataframe of the origi
 View my notebook for detailed steps here:  
 [2.Skills_Count](2_ADVANCED/1_BASIC/3.Project/skills_count.ipynb)
 
-## Visualise Data (seaborn)
+### Code
 ```python
 fig, ax = plt.subplots(len(job_titles), 1, figsize=(10, 15))
 
@@ -28,11 +28,11 @@ for i, job_title in enumerate(job_titles):
     for n, v in enumerate(subset['skill_percentage']):
         ax[i].text(v + 1, n, f"{v:.0f}%", color='black', va='center', fontweight='bold')
 ```
-## Results
+### Visualisation
 ![Visualisation of Top Skills for Data Jobs in the UK](SKILL_DEMAND_UK.png)
 
 
-### Insights 
+#### Insights 
 
 1. In the UK, SQL 👾 and Python 🐍 are in high demand for all top data jobs.
 
@@ -40,9 +40,9 @@ for i, job_title in enumerate(job_titles):
 
 3. As pay goes up from data analyst, engineer and scientist, there is a greater demand for advanced coding skills such as python and R. 
 
-## How are job skills trending for Data Science jobs in the UK 
+## 2. How are job skills trending for Data Science jobs in the UK 
 
-## Visualisation 
+### Code 
 
 ``` python 
 #using seaborn to plot the trends
@@ -64,14 +64,15 @@ plt.ylabel('Percentage of Job Postings (%)')
 plt.legend(title='Skills', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=10, title_fontsize=12, borderaxespad=0.)
 plt.tight_layout()
 ```
-## Results
+#### Visualisation
 
 ![Visualisation of Skill Demands for Data Jobs postings in the UK](output.png) 
 
 - Python remains stable throughout the year and above skills like sql and R. 
 
-## Differences between median salaries of the top 3 Data Roles 
+## 3. Differences between median salaries of the top 3 Data Roles 
 
+### Code
 ``` python 
 order = medians.index.tolist()
 
@@ -132,7 +133,7 @@ plt.show()
 
 ```
 
-## Results 
+### Visualisation
 
 ![salary_analysis](Boxplot.png)
 
@@ -141,3 +142,68 @@ plt.show()
 - The median across all three roles combined was $97,000 USD. Both Data Scientists and Engineers had higher medians than the combined median, however, data analyst did not. 
 
 - It is highly likely data analyst roles have a lower median due to years of experience and skillset. As previously shown above, there is less emphasis on data analysts to learn advanced coding languages such as python and r. These languages command a higher salary for data roles. 
+
+## 4. Optimal Skills for Data Scientists 
+
+I chose data scientist as it is a pathway I am interested in due to my affinity for science and research! 
+
+### Code 
+``` python 
+#Wanted to try using seaborn with more control over the figure and axes
+
+fig, ax = plt.subplots(figsize=(10,6))  # create figure & axes
+
+# Scatter plot using hue for continuous coloring
+scatter = sns.scatterplot(
+    data=top_skills,
+    x='skill_percent',
+    y='median_salary',
+    hue='median_salary',        # continuous color
+    palette='plasma',           # colormap
+    s=50,
+    alpha=0.8,
+    edgecolor='k',
+    ax=ax,                      # <-- pass axes explicitly
+    legend=False                # hide automatic legend
+)
+sns.despine()
+# Add colorbar with custom label
+norm = matplotlib.colors.Normalize(
+    vmin=top_skills['median_salary'].min(),
+    vmax=top_skills['median_salary'].max()
+)
+sm = plt.cm.ScalarMappable(cmap='plasma', norm=norm)
+sm.set_array([])
+
+cbar = fig.colorbar(sm, ax=ax)   # <-- attach to the correct axes
+cbar.set_label("Median Salary", fontsize=12)
+
+# Add text labels
+texts = []
+for i, txt in enumerate(top_skills.index):
+    texts.append(
+        ax.text(
+            top_skills["skill_percent"].iloc[i] + 0.1,
+            top_skills["median_salary"].iloc[i] + 0.1,
+            txt
+        )
+    )
+adjust_text(texts, arrowprops=dict(arrowstyle="->", color='r', lw=0.7))
+
+# Format axes
+ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, pos: f"${int(y/1000)}K"))
+ax.xaxis.set_major_formatter(PercentFormatter(decimals=0))
+
+# Labels & title
+ax.set_title("Most Optimal Skills for Data Scientists in UK", fontsize=16, pad=15,  weight='bold')
+ax.set_xlabel("Skill Percent (%)")
+ax.set_ylabel("Median Salary")
+
+plt.tight_layout()
+plt.show()
+```
+
+![Visualisation of Skill Demands for Data Jobs postings in the UK](optimal skills.png)    
+
+
+
