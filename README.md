@@ -55,7 +55,7 @@ plt.xlabel(' ')
 # Mapping month numbers to month names
 plt.xticks(ticks=range(1, 13), labels=[calendar.month_name[i] for i in range(1, 13)], rotation=45)
 
-#adding y label persentage of job postings
+#adding y label percentage of job postings
 from matplotlib.ticker import FuncFormatter
 ax = plt.gca()
 ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: '{:.0f}%'.format(y)))
